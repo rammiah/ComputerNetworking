@@ -121,6 +121,6 @@ void Server::on_power_btn_clicked()
         ui->messages->append(QString("listening on: ") + ui->ip_edit->text() + ":"
                              + ui->port_edit->text() + " " + ui->root_edit->text() + "\n");
         lis_ptr->start(server_sock, ui->root_edit->text());
-        qDebug() << "Open server socket.\n";
+        // qDebug() << "Open server socket.\n";
     }
 }
