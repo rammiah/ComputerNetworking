@@ -85,7 +85,7 @@ void Server::on_power_btn_clicked()
         // ::close(server_sock);
         shutdown(server_sock, SHUT_RDWR);
         server_sock = -1;
-        ui->messages->append("close server.");
+        ui->messages->append("server closed.");
         lis_ptr->stop();
     } else {
         // open the server
@@ -119,7 +119,8 @@ void Server::on_power_btn_clicked()
         ui->root_btn->setEnabled(false);
         ui->messages->clear();
         ui->messages->append(QString("listening on: ") + ui->ip_edit->text() + ":"
-                             + ui->port_edit->text() + " " + ui->root_edit->text());
+                             + ui->port_edit->text() + " " + ui->root_edit->text() + "\n");
         lis_ptr->start(server_sock, ui->root_edit->text());
+        qDebug() << "Open server socket.\n";
     }
 }

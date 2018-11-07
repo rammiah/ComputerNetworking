@@ -17,17 +17,27 @@ static bool endswith(const std::string &main_str, const std::string &end_str) {
 
 Listener::Listener(QObject *parent) : QObject(parent)
 {
-
+    qDebug() << open << "\n";
+    pt = nullptr;
+    open = false;
+    server_sock = -1;
+    root = "/home/yaning";
 }
 
 void Listener::start(int sock, const QString &root)
 {
+    qDebug() << "start server.\n";
+    qDebug() << open << "\n";
+    qDebug() << !open << "\n";
     if (!open) {
+        qDebug() << open << "\n";
         pt = new std::thread(&Listener::my_listen, this, sock, root.toStdString());
         pt->detach();
         open = true;
         this->root = root.toStdString();
+        qDebug() << "Server opened\n";
     }
+    qDebug() << pt << "\n";
 }
 
 void Listener::stop()
@@ -143,9 +153,11 @@ void Listener::send_icon(int sockfd) {
 }
 
 void Listener::process(int sockfd, sockaddr_in addr) {
+
     // 输出一下地址信息
     QString addr_msg = QString("client address: ") +
             inet_ntoa(addr.sin_addr) + ":" + QString::number(ntohs(addr.sin_port));
+    qDebug() << addr_msg << "\n";
     emit send_message(addr_msg);
     // 逻辑处理在这里
     // 首先读取消息
