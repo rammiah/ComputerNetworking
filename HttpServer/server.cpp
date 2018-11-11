@@ -88,6 +88,7 @@ void Server::on_power_btn_clicked()
         ui->messages->append("server closed.");
         lis_ptr->stop();
     } else {
+        // 此处逻辑有可能过于复杂，不触及GUI的部分放到子线程中执行比较好
         // open the server
         server_sock = socket(AF_INET, SOCK_STREAM, 0);
         server_addr.sin_addr.s_addr = inet_addr(ui->ip_edit->text().toStdString().c_str());
@@ -121,6 +122,6 @@ void Server::on_power_btn_clicked()
         ui->messages->append(QString("listening on: ") + ui->ip_edit->text() + ":"
                              + ui->port_edit->text() + " " + ui->root_edit->text() + "\n");
         lis_ptr->start(server_sock, ui->root_edit->text());
-        // qDebug() << "Open server socket.\n";
+         qDebug() << "Open server socket.\n";
     }
 }
