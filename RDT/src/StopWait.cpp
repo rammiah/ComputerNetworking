@@ -6,13 +6,14 @@
 #include "../include/RdtReceiver.h"
 #include "../include/StopWaitRdtSender.h"
 #include "../include/StopWaitRdtReceiver.h"
-#include "GBNSender.h"
-#include "GBNReceiver.h"
-
+#include "GBNSender.hpp"
+#include "GBNReceiver.hpp"
+#include "SRSender.hpp"
+#include "SRReceiver.hpp"
 
 int main(int argc, char *argv[]) {
-    RdtSender *ps = new GBNSender();
-    RdtReceiver *pr = new GBNReceiver();
+    RdtSender *ps = new SRSender();
+    RdtReceiver *pr = new SRReceiver();
     pns->init();
     pns->setRtdSender(ps);
     pns->setRtdReceiver(pr);

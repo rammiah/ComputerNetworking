@@ -10,7 +10,9 @@
 #include <utility>
 #include <algorithm>
 #include <mutex>
+#include <memory>
 #include <cassert>
+#include <iostream>
 
 
 #define BITS 3
