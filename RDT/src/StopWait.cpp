@@ -10,10 +10,35 @@
 #include "GBNReceiver.hpp"
 #include "SRSender.hpp"
 #include "SRReceiver.hpp"
+#include "TCPSender.hpp"
 
 int main(int argc, char *argv[]) {
-    RdtSender *ps = new SRSender();
-    RdtReceiver *pr = new SRReceiver();
+    int sele = -1;
+    if (argc == 2) {
+//        strto
+        sele = std::stoi(argv[1]);
+    }
+    RdtSender *ps;
+    RdtReceiver *pr;
+
+    switch (sele) {
+        case 0:
+            ps = new GBNSender();
+            pr = new GBNReceiver();
+            break;
+        case 1:
+            ps = new SRSender();
+            pr = new SRReceiver();
+            break;
+        case 2:
+            ps = new TCPSender();
+            pr = new GBNReceiver();
+            break;
+        default:
+            ps = new StopWaitRdtSender();
+            pr = new StopWaitRdtReceiver();
+    }
+
     pns->init();
     pns->setRtdSender(ps);
     pns->setRtdReceiver(pr);

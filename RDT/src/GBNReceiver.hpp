@@ -22,7 +22,7 @@ public:
             Packet ack_pkt;
             ack_pkt.acknum = expect_seq;
             ack_pkt.seqnum = 0;
-            memset(ack_pkt.payload, 0, sizeof(ack_pkt.payload));
+            memset(ack_pkt.payload, '*', sizeof(ack_pkt.payload));
             ack_pkt.checksum = pUtils->calculateCheckSum(ack_pkt);
             pns->sendToNetworkLayer(SENDER, ack_pkt);
             expect_seq = (expect_seq + 1) % (mod);
