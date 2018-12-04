@@ -8,7 +8,15 @@ class GBNSender : public RdtSender {
     // 发送方需要设置缓冲区
     std::unique_ptr<Packet[]> buff;
     int base, next_seqnum, mod;
-//    std::mutex lock;
+
+    void print_window() {
+        std::cout << "输出窗口内容：\n";
+        for (int i = base; i != next_seqnum; i = (i + 1) % mod) {
+            pUtils->printPacket("窗口内容", buff[i]);
+        }
+        std::cout << "\n";
+    }
+
 public:
     GBNSender() {
         mod = 1 << BITS;
@@ -25,6 +33,7 @@ public:
         }
         // 发送出去
         auto &pkt = buff[next_seqnum];
+        memcpy(pkt.payload, message.data, sizeof(message.data));
         // 无用
         pkt.acknum = -1;
         // 序号有用
@@ -35,6 +44,7 @@ public:
         }
         next_seqnum = (next_seqnum + 1) % mod;
         pns->sendToNetworkLayer(RECEIVER, pkt);
+        print_window();
         // 指向下一个空的缓冲区
         return true;
     }
@@ -46,9 +56,11 @@ public:
             if (base == next_seqnum) {
                 pns->stopTimer(SENDER, 0);
             } else {
+                // 输出窗口中的内容
                 pns->stopTimer(SENDER, 0);
                 pns->startTimer(SENDER, Configuration::TIME_OUT, 0);
             }
+            print_window();
         }
     }
 
@@ -61,6 +73,7 @@ public:
                 pns->sendToNetworkLayer(RECEIVER, buff[i]);
             }
         }
+        print_window();
     }
 
 

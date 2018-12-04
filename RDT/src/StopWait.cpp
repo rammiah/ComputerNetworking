@@ -1,5 +1,3 @@
-
-
 #include "../include/Base.h"
 #include "../include/Global.h"
 #include "../include/RdtSender.h"
@@ -15,7 +13,6 @@
 int main(int argc, char *argv[]) {
     int sele = -1;
     if (argc == 2) {
-//        strto
         sele = std::stoi(argv[1]);
     }
     RdtSender *ps;
@@ -38,12 +35,11 @@ int main(int argc, char *argv[]) {
             ps = new StopWaitRdtSender();
             pr = new StopWaitRdtReceiver();
     }
-
     pns->init();
     pns->setRtdSender(ps);
     pns->setRtdReceiver(pr);
-    pns->setInputFile("/home/yaning/Documents/clion/stop_wait/src/input.txt");
-    pns->setOutputFile("/home/yaning/Documents/clion/stop_wait/src/output.txt");
+    pns->setInputFile("/home/yaning/Documents/clion/stop_wait/bin/input.txt");
+    pns->setOutputFile("/home/yaning/Documents/clion/stop_wait/bin/output.txt");
     pns->start();
 
     delete ps;

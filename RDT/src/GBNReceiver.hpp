@@ -30,6 +30,7 @@ public:
             Packet ack_pkt;
             ack_pkt.acknum = (expect_seq - 1 + mod) % mod;
             ack_pkt.seqnum = 0;
+            memset(ack_pkt.payload, '*', sizeof(ack_pkt.payload));
             ack_pkt.checksum = pUtils->calculateCheckSum(ack_pkt);
             pns->sendToNetworkLayer(SENDER, ack_pkt);
         }

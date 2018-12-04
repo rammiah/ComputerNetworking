@@ -21,6 +21,14 @@ class SRSender : public RdtSender {
         return num >= base || num < next_seqnum;
     }
 
+    void print_window() {
+        std::cout << "输出窗口内容：\n";
+        for (int i = base; i != next_seqnum; i = (i + 1) % mod) {
+            pUtils->printPacket("窗口内容", buff[i]);
+        }
+        std::cout << "\n";
+    }
+
 public:
     SRSender() {
         mod = 1 << BITS;
@@ -45,6 +53,7 @@ public:
         pns->sendToNetworkLayer(RECEIVER, pkt);
         pns->startTimer(SENDER, Configuration::TIME_OUT, next_seqnum);
         next_seqnum = (next_seqnum + 1) % mod;
+        print_window();
         return true;
     }
 
@@ -63,6 +72,7 @@ public:
                         base = (base + 1) % mod;
                     }
                 }
+                print_window();
             }
         }
     }
@@ -70,6 +80,7 @@ public:
     void timeoutHandler(int seqNum) override {
         pns->sendToNetworkLayer(RECEIVER, buff[seqNum]);
         pns->startTimer(SENDER, Configuration::TIME_OUT, seqNum);
+        print_window();
     }
 
     bool getWaitingState() override {

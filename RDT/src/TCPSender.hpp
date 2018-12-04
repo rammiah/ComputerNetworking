@@ -23,6 +23,14 @@ class TCPSender : public RdtSender {
     int mod;
     int ack_seq;
 
+    void print_window() {
+        std::cout << "输出窗口内容：\n";
+        for (int i = base; i != next_seqnum; i = (i + 1) % mod) {
+            pUtils->printPacket("窗口内容", buff[i]);
+        }
+        std::cout << "\n";
+    }
+
 public:
     TCPSender() {
         mod = 1 << BITS;
@@ -51,6 +59,7 @@ public:
         }
         // base不动，next动
         next_seqnum = (next_seqnum + 1) % mod;
+        print_window();
         return true;
     }
 
@@ -66,6 +75,7 @@ public:
                 if (base != next_seqnum) {
                     pns->startTimer(SENDER, Configuration::TIME_OUT, 0);
                 }
+                print_window();
             } else {
                 // 记录重复的ack
                 acknums[ack_seq] = ackPkt.acknum;
@@ -76,6 +86,7 @@ public:
                     // 快速重传最早未确认包
                     pns->sendToNetworkLayer(RECEIVER, buff[base]);
                 }
+                print_window();
             }
         }
     }
@@ -85,6 +96,7 @@ public:
         pns->sendToNetworkLayer(RECEIVER, buff[base]);
         pns->stopTimer(SENDER, 0);
         pns->startTimer(SENDER, Configuration::TIME_OUT, 0);
+        print_window();
     }
 
     bool getWaitingState() override {

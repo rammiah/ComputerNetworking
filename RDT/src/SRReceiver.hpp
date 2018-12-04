@@ -32,6 +32,15 @@ private:
         return num >= _base || num < (_base + WINDOW_WIDTH) % mod;
     }
 
+    void print_window() {
+        std::cout << "输出接收方窗口：\n";
+        // 接收方的窗口其实是没什么意义的啊
+        for (int i = base; i != (base + WINDOW_WIDTH) % mod; i = (i + 1) % mod) {
+            pUtils->printPacket("窗口数据：", buff[i]);
+        }
+        std::cout << "\n";
+    }
+
 public:
     SRReceiver() {
         // 设置接收方的缓冲区
@@ -67,6 +76,7 @@ public:
                         base = (base + 1) % mod;
                     }
                 }
+                print_window();
             } else if (is_old_packet(packet.seqnum)) {
                 // 发送ack包
                 Packet ack_pkt;
@@ -75,6 +85,7 @@ public:
                 ack_pkt.acknum = packet.seqnum;
                 ack_pkt.checksum = pUtils->calculateCheckSum(ack_pkt);
                 pns->sendToNetworkLayer(SENDER, ack_pkt);
+                print_window();
             }
         }
     }
