@@ -757,7 +757,7 @@ QString Listener::send_file(int sockfd, const std::string &file)
         in.close();
         // if the file is a utf-8 html file? It is not my problem, for browser
         if (!filetype.empty()) {
-            response_header.append("Content-Type: " + filetype + "\r\n");
+            response_header.append("Content-Type: " + file_types[filetype] + "\r\n");
         }
         // add length information
         response_header.append("Content-Length: " + std::to_string(file_len) + "\r\n\r\n");
